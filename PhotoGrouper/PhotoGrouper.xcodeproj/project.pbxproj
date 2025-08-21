@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3B31C4AB2E57CAFE005B0739 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B31C4AA2E57CAFE005B0739 /* Photos.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3B31C45A2E57BECA005B0739 /* PhotoGrouper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoGrouper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B31C4AA2E57CAFE005B0739 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B31C4AB2E57CAFE005B0739 /* Photos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				3B31C45C2E57BECA005B0739 /* PhotoGrouper */,
+				3B31C4A92E57CAFE005B0739 /* Frameworks */,
 				3B31C45B2E57BECA005B0739 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +63,14 @@
 				3B31C45A2E57BECA005B0739 /* PhotoGrouper.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3B31C4A92E57CAFE005B0739 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B31C4AA2E57CAFE005B0739 /* Photos.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -107,6 +122,8 @@
 			);
 			mainGroup = 3B31C4512E57BECA005B0739;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3B31C45B2E57BECA005B0739 /* Products */;
 			projectDirPath = "";
@@ -148,11 +165,12 @@
 				DEVELOPMENT_TEAM = 4QD2W6ZWPL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoGrouper/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app scans your photo library to group photos by hash";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -176,11 +194,12 @@
 				DEVELOPMENT_TEAM = 4QD2W6ZWPL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoGrouper/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app scans your photo library to group photos by hash";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
