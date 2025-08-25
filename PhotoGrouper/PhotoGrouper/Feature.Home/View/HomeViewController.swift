@@ -14,14 +14,15 @@ final class HomeViewController: UIViewController {
         case main
     }
     
+    private let viewModel = HomeViewModel()
+    
     private var collectionView: UICollectionView!
     private var dataSource: UICollectionViewDiffableDataSource<Section, GroupDisplay>!
-    private var items: [GroupDisplay] = [
-        GroupDisplay(title: "G1", count: 5),
-        GroupDisplay(title: "G2", count: 10),
-        GroupDisplay(title: "G3", count: 15),
-        GroupDisplay(title: "others", count: 8)
-    ].filter {$0.count > 0}
+    
+    private let progressView = UIProgressView(progressViewStyle: .default)
+    private let progressLabel = UILabel()
+
+    private var items: [GroupDisplay] = []
     
     
     override func viewDidLoad() {
@@ -29,9 +30,41 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Groups"
 
+        configureProgressHeader()
         configureCollectionView()
         configureDataSource()
+        bindViewModel()
         applySnapshot(animatingDifferences: false)
+
+        viewModel.startScan()
+    }
+    
+    private func configureProgressHeader() {
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        progressLabel.font = .systemFont(ofSize: 13, weight: .medium)
+        progressLabel.textColor = .secondaryLabel
+        progressLabel.textAlignment = .left            // center text too
+
+        // Optional: make the bar easier to see
+        progressView.progressTintColor = .systemBlue
+        progressView.trackTintColor = .tertiarySystemFill
+
+        view.addSubview(progressView)
+        view.addSubview(progressLabel)
+
+        NSLayoutConstraint.activate([
+            // progress bar centered horizontally with 60% width
+            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            progressView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            progressView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            progressView.heightAnchor.constraint(equalToConstant: 4),
+
+            // label centered under the bar
+            progressLabel.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 8),
+            progressLabel.centerXAnchor.constraint(equalTo: progressView.centerXAnchor)
+        ])
     }
     
     private func configureCollectionView() {
@@ -49,7 +82,7 @@ final class HomeViewController: UIViewController {
         view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: 12),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -74,13 +107,33 @@ final class HomeViewController: UIViewController {
     private func item(at indexPath: IndexPath) -> GroupDisplay? {
         dataSource.itemIdentifier(for: indexPath)
     }
+    
+    private func bindViewModel() {
+        viewModel.onOutput = { [weak self] output in
+            guard let self else { return }
+            self.items = output.displays
+            self.applySnapshot()
+            self.progressView.setProgress(Float(output.percent), animated: true)
+            self.progressLabel.text = "Scanning photos: \(Int(output.percent * 100))% (\(output.processed)/\(output.total))"
+        }
+    }
 }
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = item(at: indexPath) else {return}
-        let mochPhotos = SamplePhoto.mock(count: 4)
-        let view = GroupDetailView(groupTitle: item.title, photos: mochPhotos)
+        let ids = viewModel.assetIDs(for: item)
+
+        guard !ids.isEmpty else {
+            let alert = UIAlertController(title: "No photos yet",
+                                          message: "This group is still scanning or has no visible items.",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+        
+        let view = GroupDetailView(groupTitle: item.title, assetIDs: ids)
         let hosting = UIHostingController(rootView: view)
         navigationController?.pushViewController(hosting, animated: true)
     }

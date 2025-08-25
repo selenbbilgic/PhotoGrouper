@@ -8,25 +8,27 @@
 import SwiftUI
 
 struct ImageDetailView: View {
-    let photos: [SamplePhoto]
+    let assetIDs: [String]
     @State var index: Int
+    @Environment(\.dismiss) private var dismiss
     
-    init(photos: [SamplePhoto], startIndex: Int) {
-        self.photos = photos
-        self._index = State(initialValue: min(max(0, startIndex), photos.count-1))
+    init(assetIDs: [String], startIndex: Int) {
+        self.assetIDs = assetIDs
+        self._index = State(initialValue: min(max(0, startIndex), assetIDs.count-1))
     }
     var body: some View {
         ZStack{
             Color.black.ignoresSafeArea()
             TabView(selection: $index) {
-                ForEach(Array(photos.enumerated()), id: \.offset) { i, item in
+                ForEach(assetIDs.indices, id: \.self) { i in
                     GeometryReader { proxy in
-                        Image(item.name)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: proxy.size.width, height:  proxy.size.height)
-                            .background(Color.black)
-                            .tag(i)
+                        GeometryReader { proxy in
+                                                PhotoFull(localIdentifier: assetIDs[i])
+                                                    .frame(width: proxy.size.width, height: proxy.size.height)
+                                                    .background(Color.black)
+                                                    .tag(i)
+                                            }
+                                            .ignoresSafeArea()
                         
                     }
                     .ignoresSafeArea()
@@ -52,4 +54,24 @@ struct ImageDetailView: View {
         }
     }
     
+}
+
+
+private struct PhotoFull: View {
+    let localIdentifier: String
+    @StateObject private var loader = PHImageLoader()
+
+    var body: some View {
+        Group {
+            if let img = loader.image {
+                Image(uiImage: img)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                ProgressView().tint(.white)
+            }
+        }
+        .onAppear { loader.loadFull(localIdentifier: localIdentifier) }
+        .onDisappear { loader.cancel() }
+    }
 }

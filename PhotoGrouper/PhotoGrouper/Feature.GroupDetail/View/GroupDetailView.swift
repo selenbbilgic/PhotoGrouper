@@ -6,30 +6,30 @@
 //
 
 import SwiftUI
+import Photos
+
+
 
 struct GroupDetailView: View {
     let groupTitle: String
-    let photos: [SamplePhoto]
+    let assetIDs: [String]
     
-    @State private var showDetail = false
-    @State private var selectedIndex: Int? = nil
+    private struct SelectedAsset: Identifiable {
+        let id: String
+    }
+    
+    @State private var selectedAsset: SelectedAsset? = nil
     
     private let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(Array(photos.enumerated()), id: \.element) { index, item in
-                    Image(item.name)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 100)
-                        .clipped()
-                        .cornerRadius(8)
-                        .onTapGesture {
-                            selectedIndex = index
-                            showDetail = true
-                        }
+                ForEach(assetIDs, id: \.self) { id in
+                    PhotoThumbnail(localIdentifier: id)
+                                            .onTapGesture {
+                                                selectedAsset = SelectedAsset(id: id)
+                                            }
                     
                 }
                     
@@ -37,8 +37,11 @@ struct GroupDetailView: View {
             .padding(12)
         }
         .navigationTitle(groupTitle)
-        .fullScreenCover(isPresented: $showDetail) {
-            ImageDetailView(photos: photos, startIndex: selectedIndex ?? 0)
+        .fullScreenCover(item: $selectedAsset) {
+            sel in
+            let start = assetIDs.firstIndex(of: sel.id) ?? 0
+            ImageDetailView(assetIDs: assetIDs, startIndex: start)
+                .onDisappear { selectedAsset = nil }
         }
     }
 }
