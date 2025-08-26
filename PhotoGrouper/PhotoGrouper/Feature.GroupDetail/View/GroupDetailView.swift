@@ -42,6 +42,8 @@ struct GroupDetailView: View {
             let start = assetIDs.firstIndex(of: sel.id) ?? 0
             ImageDetailView(assetIDs: assetIDs, startIndex: start)
                 .onDisappear { selectedAsset = nil }
+                
         }
     }
+        
 }

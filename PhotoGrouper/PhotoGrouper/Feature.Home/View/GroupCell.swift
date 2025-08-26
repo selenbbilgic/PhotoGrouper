@@ -46,7 +46,7 @@ final class GroupCell: UICollectionViewCell {
             countBadge.translatesAutoresizingMaskIntoConstraints = false
             countBadge.font = .systemFont(ofSize: 13, weight: .bold)
             countBadge.textColor = .white
-            countBadge.backgroundColor = .systemBlue
+        countBadge.backgroundColor = .systemPink
             countBadge.textAlignment = .center
             countBadge.layer.cornerRadius = 12
             countBadge.layer.masksToBounds = true

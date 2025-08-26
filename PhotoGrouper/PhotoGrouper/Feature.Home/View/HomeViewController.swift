@@ -37,6 +37,16 @@ final class HomeViewController: UIViewController {
         applySnapshot(animatingDifferences: false)
 
         viewModel.startScan()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+    }
+    
+    @objc private func appWillResignActive() {
+        viewModel.saveSnapshot()
+    }
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func configureProgressHeader() {
@@ -48,7 +58,7 @@ final class HomeViewController: UIViewController {
         progressLabel.textAlignment = .left            // center text too
 
         // Optional: make the bar easier to see
-        progressView.progressTintColor = .systemBlue
+        progressView.progressTintColor = .systemPink
         progressView.trackTintColor = .tertiarySystemFill
 
         view.addSubview(progressView)

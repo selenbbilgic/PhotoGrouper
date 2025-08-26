@@ -38,3 +38,14 @@ final class PhotoLibraryService {
         return assets
     }
 }
+
+extension PhotoLibraryService {
+    func fetchAssets(withLocalIdentifiers ids: [String]) -> [PHAsset] {
+        guard !ids.isEmpty else {return []}
+        let res = PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil)
+        var out: [PHAsset] = []
+        out.reserveCapacity(res.count)
+        res.enumerateObjects{a, _, _ in out.append(a)}
+        return out
+    }
+}

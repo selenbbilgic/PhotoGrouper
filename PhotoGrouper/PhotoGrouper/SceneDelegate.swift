@@ -26,6 +26,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = window
         window.makeKeyAndVisible()
     }
+    
+    override init() {
+        let appearance = UINavigationBarAppearance()
+           appearance.configureWithDefaultBackground()
+           appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+
+        UINavigationBar.appearance().tintColor = .systemPink  
+           UINavigationBar.appearance().standardAppearance = appearance
+           UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
