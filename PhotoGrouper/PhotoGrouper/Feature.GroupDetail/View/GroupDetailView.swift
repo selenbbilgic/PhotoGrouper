@@ -34,7 +34,7 @@ struct GroupDetailView: View {
                 }
                     
             }
-            .padding(12)
+            .padding(16)
         }
         .navigationTitle(groupTitle)
         .fullScreenCover(item: $selectedAsset) {

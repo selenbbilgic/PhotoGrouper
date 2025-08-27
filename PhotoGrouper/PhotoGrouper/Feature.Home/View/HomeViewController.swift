@@ -55,9 +55,8 @@ final class HomeViewController: UIViewController {
 
         progressLabel.font = .systemFont(ofSize: 13, weight: .medium)
         progressLabel.textColor = .secondaryLabel
-        progressLabel.textAlignment = .left            // center text too
+        progressLabel.textAlignment = .left
 
-        // Optional: make the bar easier to see
         progressView.progressTintColor = .systemPink
         progressView.trackTintColor = .tertiarySystemFill
 
